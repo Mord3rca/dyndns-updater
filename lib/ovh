@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if command -v curl; then
+	die "Please install curl to load/execute OVH helper"
+fi
+
+set_dns_ipv4_callback() {
+	local usr="${1}"
+	local pwd="${2}"
+	local nip="${3}"
+	curl -m 5 -L --location-trusted --user "${usr}:${pwd}" \
+		"https://www.ovh.com/nic/update?system=dyndns&hostname=${DYNDNS_HOST}&myip=${nip}"
+}
