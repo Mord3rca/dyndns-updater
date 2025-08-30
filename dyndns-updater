@@ -67,4 +67,4 @@ if [ "${dns_ipv4}" == "${wan_ipv4}" ]; then
 	exit 0
 fi
 
-execute_callback "${DYNDNS_USER}" "${DYNDNS_PASSWD}" "${wan_ipv4}"
+execute_callback set_dns_ipv4 "${DYNDNS_USER}" "${DYNDNS_PASSWD}" "${wan_ipv4}"
