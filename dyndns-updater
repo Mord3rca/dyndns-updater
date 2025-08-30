@@ -4,7 +4,7 @@
 
 set -eEu
 
-: "${LIBPATH:=/usr/lib/dyndns-updater}"
+: "${LIBPATH:="$(realpath "$(dirname "${0}")"/../lib/dyndns-updater)"}"
 : "${SECRETFILE:="${HOME}/.keys/dyndns"}"
 
 die() {
