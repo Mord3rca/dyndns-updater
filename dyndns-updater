@@ -14,7 +14,7 @@ die() {
 export -f die
 
 for cmd in dig curl; do
-	if ! command -v "${cmd}"; then
+	if ! command -v "${cmd}" &>/dev/null; then
 		die "Command '${cmd}' is not found or not present in PATH, please install it and rerun this script"
 	fi
 done
@@ -52,7 +52,7 @@ default_get_wan_ipv4_callback() {
 execute_callback() {
 	local callback_name="${1}"
 	shift
-	if command -v "${callback_name}_callback"; then
+	if command -v "${callback_name}_callback" &>/dev/null; then
 		"${callback_name}_callback" "${@}"
 	else
 		"default_${callback_name}_callback" "${@}"
