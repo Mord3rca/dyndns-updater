@@ -28,16 +28,11 @@ if [ ! -v DYNDNS_PROVIDER ]; then
 	die "Please set DYNDNSPROVIDER variable from env or secret file"
 fi
 
-#shellcheck source=/dev/null
-source "${LIBPATH}/${DYNDNS_PROVIDER}" || {
-	die "Failed to load helper for ${DYNDNS_PROVIDER}"
-}
-
-default_get_dns_ipv4_callback() {
+get_dns_ipv4() {
 	dig +short "${DYNDNS_HOST}"
 }
 
-default_set_dns_ipv4_callback() {
+set_dns_ipv4() {
 #	local usr="${1}"
 #	local pwd="${2}"
 #	local nip="${3}"
@@ -45,26 +40,21 @@ default_set_dns_ipv4_callback() {
 		"And so .... This is an error."
 }
 
-default_get_wan_ipv4_callback() {
+get_wan_ipv4() {
 	curl -m 5 -4 --silent https://ifconfig.co
 }
 
-execute_callback() {
-	local callback_name="${1}"
-	shift
-	if command -v "${callback_name}_callback" &>/dev/null; then
-		"${callback_name}_callback" "${@}"
-	else
-		"default_${callback_name}_callback" "${@}"
-	fi
+#shellcheck source=/dev/null
+source "${LIBPATH}/${DYNDNS_PROVIDER}" || {
+	die "Failed to load helper for ${DYNDNS_PROVIDER}"
 }
 
-dns_ipv4=$(execute_callback get_dns_ipv4)
-wan_ipv4=$(execute_callback get_wan_ipv4)
+dns_ipv4=$(get_dns_ipv4)
+wan_ipv4=$(get_wan_ipv4)
 
 if [ "${dns_ipv4}" == "${wan_ipv4}" ]; then
 	echo "Remote IP & current ip are matching, nothing to do"
 	exit 0
 fi
 
-execute_callback set_dns_ipv4 "${DYNDNS_USER}" "${DYNDNS_PASSWD}" "${wan_ipv4}"
+set_dns_ipv4 "${DYNDNS_USER}" "${DYNDNS_PASSWD}" "${wan_ipv4}"

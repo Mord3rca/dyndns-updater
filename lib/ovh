@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set_dns_ipv4_callback() {
+set_dns_ipv4() {
 	local usr="${1}"
 	local pwd="${2}"
 	local nip="${3}"
