@@ -1,0 +1,5 @@
+# Fill this one SECRETFILE to work with systemd
+#DYNDNS_PROVIDER=ovh
+#DYNDNS_HOST=
+#DYNDNS_USER=
+#DYNDNS_PASSWD=
