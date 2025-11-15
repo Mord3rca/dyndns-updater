@@ -19,15 +19,6 @@ for cmd in dig curl; do
 	fi
 done
 
-#shellcheck source=/dev/null
-source "${SECRETFILE}" || {
-	die "Could not source secret file: '${SECRETFILE}'"
-}
-
-if [ ! -v DYNDNS_PROVIDER ]; then
-	die "Please set DYNDNSPROVIDER variable from env or secret file"
-fi
-
 get_dns_ipv4() {
 	dig +short "${DYNDNS_HOST}"
 }
@@ -43,6 +34,20 @@ set_dns_ipv4() {
 get_wan_ipv4() {
 	curl -m 5 -4 --silent https://ifconfig.co
 }
+
+if [ "$(basename "${0}")" == get-wan-ip ]; then
+	get_wan_ipv4
+	exit 0
+fi
+
+#shellcheck source=/dev/null
+source "${SECRETFILE}" || {
+	die "Could not source secret file: '${SECRETFILE}'"
+}
+
+if [ ! -v DYNDNS_PROVIDER ]; then
+	die "Please set DYNDNSPROVIDER variable from env or secret file"
+fi
 
 #shellcheck source=/dev/null
 source "${LIBPATH}/${DYNDNS_PROVIDER}" || {
