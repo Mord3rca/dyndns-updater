@@ -15,6 +15,7 @@ all:
 install:
 	$(INSTALL) -d $(DESTDIR)$(bindir)
 	$(INSTALL) dyndns-updater $(DESTDIR)$(bindir)
+	ln -sf dyndns-updater $(DESTDIR)$(bindir)/get-wan-ip
 
 	$(INSTALL) -d $(DESTDIR)$(libdir)/dyndns-updater
 	$(INSTALL) lib/* $(DESTDIR)$(libdir)/dyndns-updater
